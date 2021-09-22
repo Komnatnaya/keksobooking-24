@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
-* Студент: [Евгений Кулаков](https://up.htmlacademy.ru/javascript/24/user/1014749).
-* Наставник: `Неизвестно`.
+- Студент: [Евгений Кулаков](https://up.htmlacademy.ru/javascript/24/user/1014749).
+- Наставник: [Дина Абрамова](https://up.htmlacademy.ru/javascript/24/user/1483099).
 
 ---
 
