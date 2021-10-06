@@ -79,7 +79,7 @@ const getNumberWithZero = () => {
 
 const getNumber = getNumberWithZero();
 
-const housing = () => {
+const getHousing = () => {
   const lat = getRandomPositiveFloat(Latitude.MIN, Latitude.MAX, DIGITS);
   const lng = getRandomPositiveFloat(Longitude.MIN, Longitude.MAX, DIGITS);
 
@@ -107,6 +107,6 @@ const housing = () => {
   });
 };
 
-const housings = Array.from({length: AMOUNT_OF_HOUSING}, housing);
+const housings = Array.from({length: AMOUNT_OF_HOUSING}, getHousing);
 
 housings;
