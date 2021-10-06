@@ -4,7 +4,8 @@ import { getRandomPositiveFloat } from './utils/get-random-positive-float.js';
 const features = ['wifi' ,'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 const apartments = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 const time = ['12:00', '13:00', '14:00'];
-const FIRST_NUMBER_WITHOUT_ZERO = 10;
+const TARGET_LENGTH = 2;
+const PAD_STRING = '0';
 const AMOUNT_OF_HOUSING = 10;
 const INITIAL_VALUE = 0;
 const MAX_PHOTOS = 10;
@@ -73,7 +74,7 @@ const getRandomArray = (arr) => {
 
 const getNumberWithZero = () => {
   let number = INITIAL_VALUE;
-  return () => (++number >= FIRST_NUMBER_WITHOUT_ZERO) ? number : (`0${number}`);
+  return () => String(++number).padStart(TARGET_LENGTH, PAD_STRING);
 };
 
 const getNumber = getNumberWithZero();
