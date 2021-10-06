@@ -1,4 +1,4 @@
-import { getHousing } from './get-housing.js';
+import { getHousing } from './mock-data.js';
 
 const AMOUNT_OF_HOUSING = 10;
 
