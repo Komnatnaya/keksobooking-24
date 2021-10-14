@@ -4,12 +4,12 @@ const templateCard = document.querySelector('#card').content.querySelector('.pop
 const fragment = document.createDocumentFragment();
 const container = document.querySelector('.map__canvas');
 
-const apartment = {
-  flat: 'Квартира',
-  bungalow: 'Бунгало',
-  house: 'Дом',
-  palace: 'Дворец',
-  hotel: 'Отель',
+const Apartment = {
+  FLAT: 'Квартира',
+  BUNGALOW: 'Бунгало',
+  HOUSE: 'Дом',
+  PALACE: 'Дворец',
+  HOTEL: 'Отель',
 };
 
 const Guest = {
@@ -58,7 +58,7 @@ const getCardNode = ({author, offer}) => {
   title.textContent = offer.title;
   address.textContent= offer.address;
   price.textContent = `${offer.price} ₽/ночь`;
-  type.textContent = apartment[offer.type];
+  type.textContent = Apartment[offer.type.toUpperCase()];
   capacity.textContent = `${offer.rooms} ${rooms} для ${offer.guests} ${guests}`;
   time.textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
   description.textContent = offer.description || description.remove();
