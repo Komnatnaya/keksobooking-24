@@ -53,17 +53,19 @@ const getCardNode = ({author, offer}) => {
 
   const rooms = getDeclension(offer.rooms, [Room.VALUE_1, Room.VALUE_2, Room.VALUE_3]);
   const guests = getDeclension(offer.guests, [Guest.SINGLE, Guest.MANY, Guest.MANY]);
+  const capacityDescription = `${offer.rooms} ${rooms} для ${offer.guests} ${guests}`;
+  const timeDescription = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
 
   avatar.src = author.avatar || avatar.remove();
   title.textContent = offer.title;
   address.textContent= offer.address;
-  price.textContent = `${offer.price} ₽/ночь`;
-  type.textContent = Apartment[offer.type.toUpperCase()];
-  capacity.textContent = `${offer.rooms} ${rooms} для ${offer.guests} ${guests}`;
-  time.textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
+  price.textContent = offer.price ? `${offer.price} ₽/ночь`: price.remove();
+  type.textContent = offer.type ? Apartment[offer.type.toUpperCase()] : type.remove();
+  capacity.textContent = offer.rooms && offer.guests ? capacityDescription : capacity.remove();
+  time.textContent = offer.checkin && offer.checkout ? timeDescription : time.remove();
   description.textContent = offer.description || description.remove();
 
-  if (offer.photos.length) {
+  if (offer.photos && offer.photos.length) {
     photoContainer.append(getPhotoNodes(templatePhoto, offer.photos));
     templatePhoto.remove();
   } else { photoContainer.remove(); }
