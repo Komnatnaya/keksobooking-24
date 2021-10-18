@@ -9,6 +9,8 @@ const inputPrice = form.querySelector('#price');
 const inputCapacity = form.querySelector('#capacity');
 const formButtonSubmit = form.querySelector('.ad-form__submit');
 const roomNumber = form.querySelector('#room_number');
+const checkIn = form.querySelector('#timein');
+const checkOut = form.querySelector('#timeout');
 
 const TooltipText = {
   VALUE_1: 'символ',
@@ -148,6 +150,14 @@ const setValidationForm = () => {
     [...form.elements]
       .filter((elem) => !elem.checkValidity())
       .forEach((elem) => toggleBoxShadow(elem, true));
+  });
+
+  checkIn.addEventListener('change', () => {
+    checkOut.value = checkIn.value;
+  });
+
+  checkOut.addEventListener('change', () => {
+    checkIn.value = checkOut.value;
   });
 };
 
