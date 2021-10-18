@@ -8,7 +8,7 @@ const inputType = form.querySelector('#type');
 const inputPrice = form.querySelector('#price');
 const inputCapacity = form.querySelector('#capacity');
 const formButtonSubmit = form.querySelector('.ad-form__submit');
-const roomNumber = document.querySelector('#room_number');
+const roomNumber = form.querySelector('#room_number');
 
 const TooltipText = {
   VALUE_1: 'символ',
