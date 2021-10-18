@@ -100,7 +100,10 @@ const setMinPriceAttributes = () => {
 
 const validateTitle = () => {
   const count = inputTitle.value.length;
-  const message = getDeclension(MIN_TITLE_LENGTH - count, [TooltipText.VALUE_1, TooltipText.VALUE_2, TooltipText.VALUE_3]);
+  const message = getDeclension(
+    MIN_TITLE_LENGTH - count,
+    [TooltipText.VALUE_1, TooltipText.VALUE_2, TooltipText.VALUE_3]
+  );
 
   if (count > ZERO && count < MIN_TITLE_LENGTH) {
     addCustomValidity(inputTitle, `Еще ${MIN_TITLE_LENGTH - count} ${message}`);
