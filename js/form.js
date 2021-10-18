@@ -111,7 +111,7 @@ const validateTitle = () => {
   const count = inputTitle.value.length;
   const message = getDeclension(
     MIN_TITLE_LENGTH - count,
-    [TooltipText.VALUE_1, TooltipText.VALUE_2, TooltipText.VALUE_3]
+    [TooltipText.VALUE_1, TooltipText.VALUE_2, TooltipText.VALUE_3],
   );
 
   if (count > ZERO && count < MIN_TITLE_LENGTH) {
