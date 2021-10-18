@@ -98,7 +98,7 @@ const setMinPriceAttributes = () => {
   inputPrice.min = minPrice;
 };
 
-const validateTitile = () => {
+const validateTitle = () => {
   const count = inputTitle.value.length;
   const message = getDeclension(MIN_TITLE_LENGTH - count, [TooltipText.VALUE_1, TooltipText.VALUE_2, TooltipText.VALUE_3]);
 
@@ -111,7 +111,7 @@ const validateTitile = () => {
 
 const setValidationForm = () => {
   inputTitle.addEventListener('input', () => {
-    validateTitile();
+    validateTitle();
   });
 
   inputPrice.addEventListener('input', () => {
