@@ -9,6 +9,8 @@ const inputPrice = form.querySelector('#price');
 const inputCapacity = form.querySelector('#capacity');
 const formButtonSubmit = form.querySelector('.ad-form__submit');
 const roomNumber = form.querySelector('#room_number');
+const checkIn = form.querySelector('#timein');
+const checkOut = form.querySelector('#timeout');
 
 const TooltipText = {
   VALUE_1: 'символ',
@@ -44,17 +46,18 @@ const ATTENTION_STYLE = '0 0 2px 2px #ff6547';
 const toggleBoxShadow = (elem, isAdded) => elem.style.boxShadow = isAdded ? ATTENTION_STYLE : '';
 
 const togglePageActivity = (isActive = false) => {
-  if (isActive) {
-    form.classList.remove('ad-form--disabled');
-    filters.classList.remove('map__filters--disabled');
-  } else {
-    form.classList.add('ad-form--disabled');
-    filters.classList.add('map__filters--disabled');
-  }
-
   [...form.elements, ...filters.elements]
     .filter((elem) => formElements.includes(elem.tagName.toLowerCase()))
     .forEach((elem) => elem.disabled = !isActive);
+
+  if (isActive) {
+    form.classList.remove('ad-form--disabled');
+    filters.classList.remove('map__filters--disabled');
+    return;
+  }
+
+  form.classList.add('ad-form--disabled');
+  filters.classList.add('map__filters--disabled');
 };
 
 const addCustomValidity = (elem, text) => {
@@ -75,21 +78,29 @@ const validateCapacity = () => {
 
   if (rooms < guests && rooms !== MAX_ROOM_CAPACITY) {
     addCustomValidity(inputCapacity, `В ${rooms} ${roomDec} максимум ${rooms} ${guestDec}`);
-  } else if (rooms === MAX_ROOM_CAPACITY && guests !== ZERO) {
-    addCustomValidity(inputCapacity, 'Не для гостей');
-  } else if (guests === ZERO && rooms !== MAX_ROOM_CAPACITY) {
-    addCustomValidity(inputCapacity, 'Укажите количество мест');
-  } else {
-    removeCustomValidity(inputCapacity);
+    return;
   }
+
+  if (rooms === MAX_ROOM_CAPACITY && guests !== ZERO) {
+    addCustomValidity(inputCapacity, 'Не для гостей');
+    return;
+  }
+
+  if (guests === ZERO && rooms !== MAX_ROOM_CAPACITY) {
+    addCustomValidity(inputCapacity, 'Укажите количество мест');
+    return;
+  }
+
+  removeCustomValidity(inputCapacity);
 };
 
 const validatePrice = () => {
   if (Number(inputPrice.value) < Number(inputPrice.min)) {
     addCustomValidity(inputPrice, `Минимальная цена ${inputPrice.min}`);
-  } else {
-    removeCustomValidity(inputPrice);
+    return;
   }
+
+  removeCustomValidity(inputPrice);
 };
 
 const setMinPriceAttributes = () => {
@@ -98,20 +109,24 @@ const setMinPriceAttributes = () => {
   inputPrice.min = minPrice;
 };
 
-const validateTitile = () => {
+const validateTitle = () => {
   const count = inputTitle.value.length;
-  const message = getDeclension(MIN_TITLE_LENGTH - count, [TooltipText.VALUE_1, TooltipText.VALUE_2, TooltipText.VALUE_3]);
+  const message = getDeclension(
+    MIN_TITLE_LENGTH - count,
+    [TooltipText.VALUE_1, TooltipText.VALUE_2, TooltipText.VALUE_3],
+  );
 
   if (count > ZERO && count < MIN_TITLE_LENGTH) {
     addCustomValidity(inputTitle, `Еще ${MIN_TITLE_LENGTH - count} ${message}`);
-  } else {
-    removeCustomValidity(inputTitle);
+    return;
   }
+
+  removeCustomValidity(inputTitle);
 };
 
 const setValidationForm = () => {
   inputTitle.addEventListener('input', () => {
-    validateTitile();
+    validateTitle();
   });
 
   inputPrice.addEventListener('input', () => {
@@ -135,6 +150,14 @@ const setValidationForm = () => {
     [...form.elements]
       .filter((elem) => !elem.checkValidity())
       .forEach((elem) => toggleBoxShadow(elem, true));
+  });
+
+  checkIn.addEventListener('change', () => {
+    checkOut.value = checkIn.value;
+  });
+
+  checkOut.addEventListener('change', () => {
+    checkIn.value = checkOut.value;
   });
 };
 
