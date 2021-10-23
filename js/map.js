@@ -61,7 +61,7 @@ const createMap = (successCallback) => {
 
   mainMarker.on('moveend', (evt) => {
     address.value = evt.target.toGeoJSON().geometry.coordinates
-      .map((item) => item.toFixed(DIGITS))
+      .map((coordinate) => coordinate.toFixed(DIGITS))
       .reverse()
       .join(', ');
   });
