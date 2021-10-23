@@ -85,4 +85,4 @@ const renderCards = (housings) => {
   container.append(fragment);
 };
 
-export { renderCards };
+export { renderCards, getCardNode };
