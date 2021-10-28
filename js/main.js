@@ -1,15 +1,17 @@
 import { getHousing } from './mock-data.js';
-import { togglePageActivity, setValidationForm } from './form.js';
+import { setValidationForm, toggleFormActivity, toggleFiltersActivity } from './form.js';
 import { createMap, addSimilarMarkers } from './map.js';
 
 const AMOUNT_OF_HOUSING = 10;
 
 const onMapSuccessLoading = () => {
-  togglePageActivity(true);
+  toggleFiltersActivity(true);
+  toggleFormActivity(true);
   setValidationForm();
 };
 
-togglePageActivity(false);
+toggleFiltersActivity(false);
+toggleFormActivity(false);
 
 createMap(onMapSuccessLoading);
 

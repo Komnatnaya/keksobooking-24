@@ -41,23 +41,39 @@ const Guest = {
   MANY: 'гостей',
 };
 
+const DisabledClass = {
+  FORM: 'ad-form--disabled',
+  FILTERS: 'map__filters--disabled',
+};
+
 const ATTENTION_STYLE = '0 0 2px 2px #ff6547';
 
 const toggleBoxShadow = (elem, isAdded) => elem.style.boxShadow = isAdded ? ATTENTION_STYLE : '';
 
-const togglePageActivity = (isActive = false) => {
-  [...form.elements, ...filters.elements]
+const toggleElementActivity = (node, isActive) => {
+  [...node.elements]
     .filter((elem) => formElements.includes(elem.tagName.toLowerCase()))
     .forEach((elem) => elem.disabled = !isActive);
+};
 
+const toggleFormActivity = (isActive = false) => {
+  toggleElementActivity(form, isActive);
   if (isActive) {
-    form.classList.remove('ad-form--disabled');
-    filters.classList.remove('map__filters--disabled');
+    form.classList.remove(DisabledClass.FORM);
     return;
   }
 
-  form.classList.add('ad-form--disabled');
-  filters.classList.add('map__filters--disabled');
+  form.classList.add(DisabledClass.FORM);
+};
+
+const toggleFiltersActivity = (isActive = false) => {
+  toggleElementActivity(filters, isActive);
+  if (isActive) {
+    filters.classList.remove(DisabledClass.FILTERS);
+    return;
+  }
+
+  filters.classList.add(DisabledClass.FILTERS);
 };
 
 const addCustomValidity = (elem, text) => {
@@ -161,4 +177,4 @@ const setValidationForm = () => {
   });
 };
 
-export { togglePageActivity, setValidationForm };
+export { setValidationForm, toggleFormActivity, toggleFiltersActivity };
