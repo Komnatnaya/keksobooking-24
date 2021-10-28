@@ -1,8 +1,6 @@
 import { getDeclension } from './util.js';
 
 const templateCard = document.querySelector('#card').content.querySelector('.popup');
-const fragment = document.createDocumentFragment();
-const container = document.querySelector('.map__canvas');
 
 const Apartment = {
   FLAT: 'Квартира',
@@ -80,9 +78,4 @@ const getCardNode = ({author, offer}) => {
   return card;
 };
 
-const renderCards = (housings) => {
-  housings.forEach((housing) => fragment.append(getCardNode(housing)));
-  container.append(fragment);
-};
-
-export { renderCards, getCardNode };
+export { getCardNode };
