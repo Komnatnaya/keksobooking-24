@@ -68,12 +68,12 @@ const getCardNode = ({author, offer}) => {
     templatePhoto.remove();
   } else { photoContainer.remove(); }
 
-  features.forEach((elem) => {
+  offer.features && features.forEach((elem) => {
     const classSlice = elem.className.split('--')[1];
     if (!offer.features.includes(classSlice)) { elem.remove(); }
   });
 
-  if (!offer.features.length) { featureContainer.remove(); }
+  if (!offer.features || !offer.features.length) { featureContainer.remove(); }
 
   return card;
 };
