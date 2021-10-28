@@ -1,4 +1,4 @@
-import { getCardNode } from './render-cards.js';
+import { getCardNode } from './card.js';
 
 const address = document.querySelector('#address');
 const POINT_OF_CENTER = {
