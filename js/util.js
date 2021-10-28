@@ -18,3 +18,19 @@ export const getDeclension = (number, titles) => {
   const cases = [2, 0, 1, 1, 1, 2];
   return titles[ (number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5] ];
 };
+
+export const onErrorNotice = (message) => {
+  const notice = document.createElement('div');
+  notice.style.padding = '5px';
+  notice.style.backgroundColor = 'crimson';
+  notice.style.position = 'absolute';
+  notice.style.top = '0';
+  notice.style.left = '0';
+  notice.style.right = '0';
+  notice.style.color = 'white';
+  notice.style.zIndex = '999';
+  notice.style.fontSize = '26px';
+  notice.style.textAlign = 'center';
+  notice.textContent = message;
+  document.querySelector('main').append(notice);
+};

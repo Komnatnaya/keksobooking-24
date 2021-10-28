@@ -1,20 +1,22 @@
-import { getHousing } from './mock-data.js';
+import { loadHousings } from './data.js';
 import { setValidationForm, toggleFormActivity, toggleFiltersActivity } from './form.js';
 import { createMap, addSimilarMarkers } from './map.js';
+import { onErrorNotice } from './util.js';
 
 const AMOUNT_OF_HOUSING = 10;
-
-const onMapSuccessLoading = () => {
-  toggleFiltersActivity(true);
-  toggleFormActivity(true);
-  setValidationForm();
-};
 
 toggleFiltersActivity(false);
 toggleFormActivity(false);
 
-createMap(onMapSuccessLoading);
+const onSuccess = (housings) => {
+  addSimilarMarkers(housings.slice(0, AMOUNT_OF_HOUSING));
+  toggleFiltersActivity(true);
+};
 
-const housings = Array.from({length: AMOUNT_OF_HOUSING}, getHousing);
+const onMapLoading = () => {
+  toggleFormActivity(true);
+  setValidationForm();
+  loadHousings(onSuccess, onErrorNotice);
+};
 
-addSimilarMarkers(housings);
+createMap(onMapLoading);
