@@ -1,7 +1,13 @@
 import { loadHousings } from './data.js';
-import { setValidationForm, toggleFormActivity, toggleFiltersActivity } from './form.js';
+import {
+  setValidationForm,
+  toggleFormActivity,
+  toggleFiltersActivity,
+  setFormSubmit,
+  resetForm
+} from './form.js';
 import { createMap, addSimilarMarkers } from './map.js';
-import { onErrorNotice } from './util.js';
+import { onErrorNotice, onSuccessUserNotice, onErrorUserNotice } from './util.js';
 
 const AMOUNT_OF_HOUSING = 10;
 
@@ -16,6 +22,13 @@ const onSuccess = (housings) => {
 const onMapLoading = () => {
   toggleFormActivity(true);
   setValidationForm();
+  setFormSubmit(
+    () => {
+      onSuccessUserNotice();
+      resetForm();
+    },
+    onErrorUserNotice,
+  );
   loadHousings(onSuccess, onErrorNotice);
 };
 

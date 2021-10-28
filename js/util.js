@@ -1,3 +1,13 @@
+const successNode = document.querySelector('#success')
+  .content.querySelector('.success')
+  .cloneNode(true);
+
+const errorNode = document.querySelector('#error')
+  .content.querySelector('.error')
+  .cloneNode(true);
+
+const container = document.querySelector('body');
+
 export const getRandomPositiveInteger = (alpha, beta) => {
   const lower = Math.ceil(Math.min(Math.abs(alpha), Math.abs(beta)));
   const upper = Math.floor(Math.max(Math.abs(alpha), Math.abs(beta)));
@@ -34,3 +44,23 @@ export const onErrorNotice = (message) => {
   notice.textContent = message;
   document.querySelector('main').append(notice);
 };
+
+const showNotice = (node) => {
+  const onWindowKeydown = (evt) => {
+    if (evt.key === 'Escape') {
+      node.remove();
+      window.removeEventListener('keydown', onWindowKeydown);
+    }
+  };
+
+  container.append(node);
+  node.addEventListener('click', () => {
+    node.remove();
+    window.removeEventListener('keydown', onWindowKeydown);
+  });
+
+  window.addEventListener('keydown', onWindowKeydown);
+};
+
+export const onSuccessUserNotice = () => showNotice(successNode);
+export const onErrorUserNotice = () => showNotice(errorNode);

@@ -93,4 +93,18 @@ const removeSimilarMarkers = () => {
   markerGroup.clearLayers();
 };
 
-export { createMap, addSimilarMarkers, removeSimilarMarkers };
+const resetMap = () => {
+  map.closePopup();
+  map.setView({
+    lat: POINT_OF_CENTER.lat,
+    lng: POINT_OF_CENTER.lng,
+  }, MAP_ZOOM);
+  mainMarker.setLatLng({
+    lat: POINT_OF_CENTER.lat,
+    lng: POINT_OF_CENTER.lng,
+  });
+};
+
+const getMarkerCoordinates = () => mainMarker.getLatLng();
+
+export { createMap, addSimilarMarkers, removeSimilarMarkers, resetMap, getMarkerCoordinates };

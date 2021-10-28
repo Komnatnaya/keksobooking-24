@@ -1,4 +1,6 @@
 import { getDeclension } from './util.js';
+import { sendData } from './data.js';
+import { resetMap, getMarkerCoordinates } from './map.js';
 
 const form = document.querySelector('.ad-form');
 const filters = document.querySelector('.map__filters');
@@ -11,6 +13,8 @@ const formButtonSubmit = form.querySelector('.ad-form__submit');
 const roomNumber = form.querySelector('#room_number');
 const checkIn = form.querySelector('#timein');
 const checkOut = form.querySelector('#timeout');
+const resetButton = form.querySelector('.ad-form__reset');
+const address = form.querySelector('#address');
 
 const TooltipText = {
   VALUE_1: 'символ',
@@ -21,6 +25,7 @@ const TooltipText = {
 const ZERO = 0;
 const MIN_TITLE_LENGTH = 30;
 const MAX_ROOM_CAPACITY = 100;
+const DIGITS = 5;
 
 const ApartmentMinPrice = {
   FLAT: 1000,
@@ -140,6 +145,17 @@ const validateTitle = () => {
   removeCustomValidity(inputTitle);
 };
 
+const resetForm = () => {
+  resetMap();
+  form.reset();
+  filters.reset();
+  setTimeout(() => {
+    address.value = `${getMarkerCoordinates().lat.toFixed(DIGITS)}, ${getMarkerCoordinates().lng.toFixed(DIGITS)}`;
+    setMinPriceAttributes();
+  });
+  [...form.elements].forEach((elem) => toggleBoxShadow(elem));
+};
+
 const setValidationForm = () => {
   inputTitle.addEventListener('input', () => {
     validateTitle();
@@ -175,6 +191,22 @@ const setValidationForm = () => {
   checkOut.addEventListener('change', () => {
     checkIn.value = checkOut.value;
   });
+
+  resetButton.addEventListener('click', () => {
+    resetForm();
+  });
 };
 
-export { setValidationForm, toggleFormActivity, toggleFiltersActivity };
+const setFormSubmit = (onSuccess, onError) => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      onSuccess,
+      onError,
+      new FormData(evt.target),
+    );
+  });
+};
+
+export { setValidationForm, toggleFormActivity, toggleFiltersActivity, setFormSubmit, resetForm };
