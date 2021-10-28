@@ -59,7 +59,7 @@ const createMap = (successCallback) => {
     },
   ).addTo(map);
 
-  mainMarker.on('moveend', (evt) => {
+  mainMarker.on('move', (evt) => {
     address.value = evt.target.toGeoJSON().geometry.coordinates
       .map((coordinate) => coordinate.toFixed(DIGITS))
       .reverse()
