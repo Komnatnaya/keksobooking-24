@@ -1,4 +1,4 @@
-import { getCardNode } from './render-cards.js';
+import { getCardNode } from './card.js';
 
 const address = document.querySelector('#address');
 const POINT_OF_CENTER = {
@@ -59,7 +59,7 @@ const createMap = (successCallback) => {
     },
   ).addTo(map);
 
-  mainMarker.on('moveend', (evt) => {
+  mainMarker.on('move', (evt) => {
     address.value = evt.target.toGeoJSON().geometry.coordinates
       .map((coordinate) => coordinate.toFixed(DIGITS))
       .reverse()
@@ -93,4 +93,18 @@ const removeSimilarMarkers = () => {
   markerGroup.clearLayers();
 };
 
-export { createMap, addSimilarMarkers, removeSimilarMarkers };
+const resetMap = () => {
+  map.closePopup();
+  map.setView({
+    lat: POINT_OF_CENTER.lat,
+    lng: POINT_OF_CENTER.lng,
+  }, MAP_ZOOM);
+  mainMarker.setLatLng({
+    lat: POINT_OF_CENTER.lat,
+    lng: POINT_OF_CENTER.lng,
+  });
+};
+
+const getMarkerCoordinates = () => mainMarker.getLatLng();
+
+export { createMap, addSimilarMarkers, removeSimilarMarkers, resetMap, getMarkerCoordinates };

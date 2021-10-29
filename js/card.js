@@ -1,8 +1,6 @@
 import { getDeclension } from './util.js';
 
 const templateCard = document.querySelector('#card').content.querySelector('.popup');
-const fragment = document.createDocumentFragment();
-const container = document.querySelector('.map__canvas');
 
 const Apartment = {
   FLAT: 'Квартира',
@@ -70,19 +68,14 @@ const getCardNode = ({author, offer}) => {
     templatePhoto.remove();
   } else { photoContainer.remove(); }
 
-  features.forEach((elem) => {
+  offer.features && features.forEach((elem) => {
     const classSlice = elem.className.split('--')[1];
     if (!offer.features.includes(classSlice)) { elem.remove(); }
   });
 
-  if (!offer.features.length) { featureContainer.remove(); }
+  if (!offer.features || !offer.features.length) { featureContainer.remove(); }
 
   return card;
 };
 
-const renderCards = (housings) => {
-  housings.forEach((housing) => fragment.append(getCardNode(housing)));
-  container.append(fragment);
-};
-
-export { renderCards, getCardNode };
+export { getCardNode };
