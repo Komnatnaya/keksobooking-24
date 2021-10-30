@@ -145,7 +145,7 @@ const validateTitle = () => {
   removeCustomValidity(inputTitle);
 };
 
-const resetForm = () => {
+const reset = () => {
   resetMap();
   form.reset();
   filters.reset();
@@ -156,7 +156,7 @@ const resetForm = () => {
   [...form.elements].forEach((elem) => toggleBoxShadow(elem));
 };
 
-const setValidationForm = () => {
+const setValidation = () => {
   inputTitle.addEventListener('input', () => {
     validateTitle();
   });
@@ -193,11 +193,11 @@ const setValidationForm = () => {
   });
 
   resetButton.addEventListener('click', () => {
-    resetForm();
+    reset();
   });
 };
 
-const setFormSubmit = (onSuccess, onError) => {
+const setSubmit = (onSuccess, onError) => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
@@ -209,4 +209,10 @@ const setFormSubmit = (onSuccess, onError) => {
   });
 };
 
-export { setValidationForm, toggleFormActivity, toggleFiltersActivity, setFormSubmit, resetForm };
+export {
+  setValidation as setValidationForm,
+  toggleFormActivity,
+  toggleFiltersActivity,
+  setSubmit as setFormSubmit,
+  reset as resetForm
+};

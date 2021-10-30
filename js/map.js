@@ -41,7 +41,7 @@ const mainMarker = L.marker(
   },
 );
 
-const createMap = (successCallback) => {
+const create = (successCallback) => {
   map = L.map('map-canvas')
     .on('load', () => {
       successCallback();
@@ -93,7 +93,7 @@ const removeSimilarMarkers = () => {
   markerGroup.clearLayers();
 };
 
-const resetMap = () => {
+const reset = () => {
   map.closePopup();
   map.setView({
     lat: POINT_OF_CENTER.lat,
@@ -107,4 +107,10 @@ const resetMap = () => {
 
 const getMarkerCoordinates = () => mainMarker.getLatLng();
 
-export { createMap, addSimilarMarkers, removeSimilarMarkers, resetMap, getMarkerCoordinates };
+export {
+  create as createMap,
+  addSimilarMarkers,
+  removeSimilarMarkers,
+  reset as resetMap,
+  getMarkerCoordinates
+};

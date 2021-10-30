@@ -33,7 +33,7 @@ const getPhotoNodes = (template, photos) => {
   return photoNodes;
 };
 
-const getCardNode = ({author, offer}) => {
+const getNode = ({author, offer}) => {
   const card = templateCard.cloneNode(true);
 
   const avatar = card.querySelector('.popup__avatar');
@@ -78,4 +78,4 @@ const getCardNode = ({author, offer}) => {
   return card;
 };
 
-export { getCardNode };
+export { getNode as getCardNode };

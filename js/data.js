@@ -13,7 +13,7 @@ const loadHousings = (onSuccess, onError) => {
     .catch(onError);
 };
 
-const sendData = (onSuccess, onError, body) => {
+const send = (onSuccess, onError, body) => {
   fetch(
     UPLOAD_TO,
     {
@@ -31,4 +31,4 @@ const sendData = (onSuccess, onError, body) => {
     .catch(onError);
 };
 
-export { loadHousings, sendData };
+export { loadHousings, send as sendData };

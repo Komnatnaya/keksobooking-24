@@ -10,12 +10,12 @@ const container = document.querySelector('body');
 
 const ESC_KEY = 'Escape';
 
-export const getDeclension = (number, titles) => {
+const getDeclension = (number, titles) => {
   const cases = [2, 0, 1, 1, 1, 2];
   return titles[ (number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5] ];
 };
 
-export const onErrorNotice = (message) => {
+const onErrorNotice = (message) => {
   const notice = document.createElement('div');
   notice.style.padding = '5px';
   notice.style.backgroundColor = 'crimson';
@@ -48,5 +48,7 @@ const showNotice = (node) => {
   window.addEventListener('keydown', onWindowKeydown);
 };
 
-export const onSuccessUserNotice = () => showNotice(successNode);
-export const onErrorUserNotice = () => showNotice(errorNode);
+const onSuccessUserNotice = () => showNotice(successNode);
+const onErrorUserNotice = () => showNotice(errorNode);
+
+export { getDeclension, onErrorNotice, onSuccessUserNotice, onErrorUserNotice };
