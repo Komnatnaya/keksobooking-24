@@ -9,6 +9,7 @@ const errorNode = document.querySelector('#error')
 const container = document.querySelector('body');
 
 const ESC_KEY = 'Escape';
+const DELAY = 500;
 
 const getDeclension = (number, titles) => {
   const cases = [2, 0, 1, 1, 1, 2];
@@ -51,4 +52,33 @@ const showNotice = (node) => {
 const onSuccessUserNotice = () => showNotice(successNode);
 const onErrorUserNotice = () => showNotice(errorNode);
 
-export { getDeclension, onErrorNotice, onSuccessUserNotice, onErrorUserNotice };
+const debounce = (callback, timeoutDelay = DELAY) => {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+const throttle = (callback, delayBetweenFrames) => {
+  let lastTime = 0;
+
+  return (...rest) => {
+    const now = new Date();
+
+    if (now - lastTime >= delayBetweenFrames) {
+      callback.apply(this, rest);
+      lastTime = now;
+    }
+  };
+};
+
+export {
+  getDeclension,
+  onErrorNotice,
+  onSuccessUserNotice,
+  onErrorUserNotice,
+  debounce,
+  throttle
+};
