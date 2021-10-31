@@ -251,28 +251,32 @@ const getFeaturesCompare = (features, selectedFeatures) => {
   return true;
 };
 
-const setFiltering = (housings) => {
+const getFiltered = (housings) => {
+  const type = filters.elements['housing-type'].value;
+  const price = filters.elements['housing-price'].value;
+  const rooms = filters.elements['housing-rooms'].value;
+  const guests = filters.elements['housing-guests'].value;
+
+  const selectedFeatures = [...filters.elements['features']]
+    .filter(({checked}) => checked)
+    .map(({defaultValue}) => defaultValue);
+
+  const filteredHousings = housings.slice()
+    .filter(
+      ({offer}) => getTypeCompare(type, offer.type)
+      && getPriceCompare(price, offer.price)
+      && getNumberCompare(rooms, offer.rooms)
+      && getNumberCompare(guests, offer.guests)
+      && getFeaturesCompare(offer.features, selectedFeatures),
+    );
+
+  removeSimilarMarkers();
+  addSimilarMarkers(filteredHousings.slice(ZERO, AMOUNT_OF_HOUSING));
+};
+
+const setFiltersChange = (callback) => {
   filters.addEventListener('change', () => {
-    const type = filters.elements['housing-type'].value;
-    const price = filters.elements['housing-price'].value;
-    const rooms = filters.elements['housing-rooms'].value;
-    const guests = filters.elements['housing-guests'].value;
-
-    const selectedFeatures = [...filters.elements['features']]
-      .filter(({checked}) => checked)
-      .map(({defaultValue}) => defaultValue);
-
-    const filteredHousings = housings.slice()
-      .filter(
-        ({offer}) => getTypeCompare(type, offer.type)
-        && getPriceCompare(price, offer.price)
-        && getNumberCompare(rooms, offer.rooms)
-        && getNumberCompare(guests, offer.guests)
-        && getFeaturesCompare(offer.features, selectedFeatures),
-      );
-
-    removeSimilarMarkers();
-    addSimilarMarkers(filteredHousings.slice(ZERO, AMOUNT_OF_HOUSING));
+    callback();
   });
 };
 
@@ -282,6 +286,7 @@ export {
   toggleFiltersActivity,
   setSubmit as setFormSubmit,
   reset as resetForm,
-  setFiltering,
-  setReset as setFormReset
+  setReset as setFormReset,
+  setFiltersChange,
+  getFiltered
 };
