@@ -61,24 +61,10 @@ const debounce = (callback, timeoutDelay = DELAY) => {
   };
 };
 
-const throttle = (callback, delayBetweenFrames) => {
-  let lastTime = 0;
-
-  return (...rest) => {
-    const now = new Date();
-
-    if (now - lastTime >= delayBetweenFrames) {
-      callback.apply(this, rest);
-      lastTime = now;
-    }
-  };
-};
-
 export {
   getDeclension,
   onErrorNotice,
   onSuccessUserNotice,
   onErrorUserNotice,
-  debounce,
-  throttle
+  debounce
 };
