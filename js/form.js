@@ -1,6 +1,7 @@
 import { getDeclension } from './util.js';
 import { sendData } from './data.js';
-import { resetMap, getMarkerCoordinates } from './map.js';
+import { resetMap, getMarkerCoordinates, removeSimilarMarkers, addSimilarMarkers } from './map.js';
+import { ZERO, AMOUNT_OF_HOUSING } from './const.js';
 
 const form = document.querySelector('.ad-form');
 const filters = document.querySelector('.map__filters');
@@ -22,7 +23,6 @@ const TooltipText = {
   VALUE_3: 'символов',
 };
 
-const ZERO = 0;
 const MIN_TITLE_LENGTH = 30;
 const MAX_ROOM_CAPACITY = 100;
 const DIGITS = 5;
@@ -50,6 +50,13 @@ const DisabledClass = {
   FORM: 'ad-form--disabled',
   FILTERS: 'map__filters--disabled',
 };
+
+const Price = {
+  MIN: 10000,
+  MAX: 50000,
+};
+
+const DEFAULT_CHOICE = 'any';
 
 const ATTENTION_STYLE = '0 0 2px 2px #ff6547';
 
@@ -153,6 +160,7 @@ const reset = () => {
     address.value = `${getMarkerCoordinates().lat.toFixed(DIGITS)}, ${getMarkerCoordinates().lng.toFixed(DIGITS)}`;
     setMinPriceAttributes();
   });
+  removeSimilarMarkers();
   [...form.elements].forEach((elem) => toggleBoxShadow(elem));
 };
 
@@ -191,10 +199,6 @@ const setValidation = () => {
   checkOut.addEventListener('change', () => {
     checkIn.value = checkOut.value;
   });
-
-  resetButton.addEventListener('click', () => {
-    reset();
-  });
 };
 
 const setSubmit = (onSuccess, onError) => {
@@ -209,10 +213,71 @@ const setSubmit = (onSuccess, onError) => {
   });
 };
 
+const setReset = (callback) => {
+  resetButton.addEventListener('click', () => {
+    callback();
+  });
+};
+
+const getPriceCompare = (value, price) => {
+  switch (value) {
+    case 'low':
+      return price <= Price.MIN;
+    case 'middle':
+      return price >= Price.MIN && price <= Price.MAX;
+    case 'high':
+      return price >= Price.MAX;
+    default:
+      return true;
+  }
+};
+
+const getTypeCompare = (value, type) => value === DEFAULT_CHOICE ? true : value === type;
+const getNumberCompare = (value, rooms) => value === DEFAULT_CHOICE ? true : Number(value) === rooms;
+
+const getFeaturesCompare = (features, selectedFeatures) => {
+  if (!features && selectedFeatures.length > ZERO) { return false; }
+  if (selectedFeatures.length === ZERO) { return true; }
+
+  for (let i = ZERO; i < selectedFeatures.length; i++) {
+    const isHavingFeature = features.some((feature) => feature === selectedFeatures[i]);
+    if (!isHavingFeature) { return false; }
+  }
+
+  return true;
+};
+
+const setFiltering = (housings) => {
+  filters.addEventListener('change', () => {
+    const type = filters.elements['housing-type'].value;
+    const price = filters.elements['housing-price'].value;
+    const rooms = filters.elements['housing-rooms'].value;
+    const guests = filters.elements['housing-guests'].value;
+
+    const selectedFeatures = [...filters.elements['features']]
+      .filter(({checked}) => checked)
+      .map(({defaultValue}) => defaultValue);
+
+    const filteredHousings = housings.slice()
+      .filter(
+        ({offer}) => getTypeCompare(type, offer.type)
+        && getPriceCompare(price, offer.price)
+        && getNumberCompare(rooms, offer.rooms)
+        && getNumberCompare(guests, offer.guests)
+        && getFeaturesCompare(offer.features, selectedFeatures),
+      );
+
+    removeSimilarMarkers();
+    addSimilarMarkers(filteredHousings.slice(ZERO, AMOUNT_OF_HOUSING));
+  });
+};
+
 export {
   setValidation as setValidationForm,
   toggleFormActivity,
   toggleFiltersActivity,
   setSubmit as setFormSubmit,
-  reset as resetForm
+  reset as resetForm,
+  setFiltering,
+  setReset as setFormReset
 };
