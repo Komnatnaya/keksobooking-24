@@ -1,19 +1,16 @@
 const LOAD_FROM = 'https://24.javascript.pages.academy/keksobooking/data';
 const UPLOAD_TO = 'https://24.javascript.pages.academy/keksobooking';
 
-const loadHousings = (onSuccess, onError) => {
+const loadHousings = () =>
   fetch(LOAD_FROM)
     .then((response) => {
       if (response.ok) {
         return response.json();
       }
       throw new Error(`${response.status} ${response.statusText}. Ошибка загрузки данных. Попробуйте перезагрузить страницу.`);
-    })
-    .then((housings) => onSuccess(housings))
-    .catch(onError);
-};
+    });
 
-const sendData = (onSuccess, onError, body) => {
+const send = (onSuccess, onError, body) => {
   fetch(
     UPLOAD_TO,
     {
@@ -31,4 +28,4 @@ const sendData = (onSuccess, onError, body) => {
     .catch(onError);
 };
 
-export { loadHousings, sendData };
+export { loadHousings, send as sendData };

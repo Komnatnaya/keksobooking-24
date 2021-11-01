@@ -8,28 +8,15 @@ const errorNode = document.querySelector('#error')
 
 const container = document.querySelector('body');
 
-export const getRandomPositiveInteger = (alpha, beta) => {
-  const lower = Math.ceil(Math.min(Math.abs(alpha), Math.abs(beta)));
-  const upper = Math.floor(Math.max(Math.abs(alpha), Math.abs(beta)));
-  const result = Math.random() * (upper - lower + 1) + lower;
+const ESC_KEY = 'Escape';
+const DELAY = 500;
 
-  return Math.floor(result);
-};
-
-export const getRandomPositiveFloat = (alpha, beta, digits = 1) => {
-  const lower = Math.min(Math.abs(alpha), Math.abs(beta));
-  const upper = Math.max(Math.abs(alpha), Math.abs(beta));
-  const result = Math.random() * (upper - lower) + lower;
-
-  return result.toFixed(digits);
-};
-
-export const getDeclension = (number, titles) => {
+const getDeclension = (number, titles) => {
   const cases = [2, 0, 1, 1, 1, 2];
   return titles[ (number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5] ];
 };
 
-export const onErrorNotice = (message) => {
+const onErrorNotice = (message) => {
   const notice = document.createElement('div');
   notice.style.padding = '5px';
   notice.style.backgroundColor = 'crimson';
@@ -47,7 +34,7 @@ export const onErrorNotice = (message) => {
 
 const showNotice = (node) => {
   const onWindowKeydown = (evt) => {
-    if (evt.key === 'Escape') {
+    if (evt.key === ESC_KEY) {
       node.remove();
       window.removeEventListener('keydown', onWindowKeydown);
     }
@@ -62,5 +49,22 @@ const showNotice = (node) => {
   window.addEventListener('keydown', onWindowKeydown);
 };
 
-export const onSuccessUserNotice = () => showNotice(successNode);
-export const onErrorUserNotice = () => showNotice(errorNode);
+const onSuccessUserNotice = () => showNotice(successNode);
+const onErrorUserNotice = () => showNotice(errorNode);
+
+const debounce = (callback, timeoutDelay = DELAY) => {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+export {
+  getDeclension,
+  onErrorNotice,
+  onSuccessUserNotice,
+  onErrorUserNotice,
+  debounce
+};

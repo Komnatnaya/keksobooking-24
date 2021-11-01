@@ -19,13 +19,13 @@ const MAIN_ICON_SIZE = {
 const DIGITS = 5;
 
 const similarIcon = L.icon({
-  iconUrl: '../img/pin.svg',
+  iconUrl: './img/pin.svg',
   iconSize: [ICON_SIZE.width, ICON_SIZE.height],
   iconAnchor: [ICON_SIZE.width / 2, ICON_SIZE.height],
 });
 
 const mainIcon = L.icon({
-  iconUrl: '../img/main-pin.svg',
+  iconUrl: './img/main-pin.svg',
   iconSize: [MAIN_ICON_SIZE.width, MAIN_ICON_SIZE.height],
   iconAnchor: [MAIN_ICON_SIZE.width / 2, MAIN_ICON_SIZE.height],
 });
@@ -41,7 +41,7 @@ const mainMarker = L.marker(
   },
 );
 
-const createMap = (successCallback) => {
+const create = (successCallback) => {
   map = L.map('map-canvas')
     .on('load', () => {
       successCallback();
@@ -93,7 +93,7 @@ const removeSimilarMarkers = () => {
   markerGroup.clearLayers();
 };
 
-const resetMap = () => {
+const reset = () => {
   map.closePopup();
   map.setView({
     lat: POINT_OF_CENTER.lat,
@@ -107,4 +107,10 @@ const resetMap = () => {
 
 const getMarkerCoordinates = () => mainMarker.getLatLng();
 
-export { createMap, addSimilarMarkers, removeSimilarMarkers, resetMap, getMarkerCoordinates };
+export {
+  create as createMap,
+  addSimilarMarkers,
+  removeSimilarMarkers,
+  reset as resetMap,
+  getMarkerCoordinates
+};

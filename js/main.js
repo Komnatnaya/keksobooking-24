@@ -4,12 +4,14 @@ import {
   toggleFormActivity,
   toggleFiltersActivity,
   setFormSubmit,
-  resetForm
+  resetForm,
+  setFormReset,
+  setFiltersChange,
+  getFiltered
 } from './form.js';
 import { createMap, addSimilarMarkers } from './map.js';
-import { onErrorNotice, onSuccessUserNotice, onErrorUserNotice } from './util.js';
-
-const AMOUNT_OF_HOUSING = 10;
+import { onErrorNotice, onSuccessUserNotice, onErrorUserNotice, debounce } from './util.js';
+import { AMOUNT_OF_HOUSING } from './const.js';
 
 toggleFiltersActivity(false);
 toggleFormActivity(false);
@@ -17,19 +19,34 @@ toggleFormActivity(false);
 const onSuccess = (housings) => {
   addSimilarMarkers(housings.slice(0, AMOUNT_OF_HOUSING));
   toggleFiltersActivity(true);
+  setFiltersChange(
+    debounce(()=> {
+      getFiltered(housings);
+    }));
 };
 
 const onMapLoading = () => {
+  let initialHousings = null;
+
   toggleFormActivity(true);
   setValidationForm();
-  setFormSubmit(
-    () => {
-      onSuccessUserNotice();
-      resetForm();
-    },
-    onErrorUserNotice,
+  loadHousings()
+    .then((housings) => {
+      onSuccess(housings);
+      initialHousings = housings.slice(0, AMOUNT_OF_HOUSING);
+    })
+    .catch(onErrorNotice);
+
+  setFormSubmit(() => {
+    onSuccessUserNotice();
+    resetForm(initialHousings);
+  },
+  onErrorUserNotice,
   );
-  loadHousings(onSuccess, onErrorNotice);
+
+  setFormReset(() => {
+    resetForm(initialHousings);
+  });
 };
 
 createMap(onMapLoading);
