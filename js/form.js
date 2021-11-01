@@ -16,6 +16,11 @@ const checkIn = form.querySelector('#timein');
 const checkOut = form.querySelector('#timeout');
 const resetButton = form.querySelector('.ad-form__reset');
 const address = form.querySelector('#address');
+const housingType = filters.querySelector('#housing-type');
+const housingPrice = filters.querySelector('#housing-price');
+const housingRooms =  filters.querySelector('#housing-rooms');
+const housingGuests =  filters.querySelector('#housing-guests');
+const featuresElements = filters.querySelectorAll('.map__checkbox');
 
 const TooltipText = {
   VALUE_1: 'символ',
@@ -256,22 +261,16 @@ const getFeaturesCompare = (features, selectedFeatures) => {
 };
 
 const getFiltered = (housings) => {
-  const type = document.querySelector('#housing-type').value;
-  const price = document.querySelector('#housing-price').value;
-  const rooms =  document.querySelector('#housing-rooms').value;
-  const guests =  document.querySelector('#housing-guests').value;
-  const features = document.querySelectorAll('.map__checkbox');
-
-  const selectedFeatures = [...features]
+  const selectedFeatures = [...featuresElements]
     .filter(({checked}) => checked)
     .map(({defaultValue}) => defaultValue);
 
   const filteredHousings = housings.slice()
     .filter(
-      ({offer}) => getTypeCompare(type, offer.type)
-      && getPriceCompare(price, offer.price)
-      && getNumberCompare(rooms, offer.rooms)
-      && getNumberCompare(guests, offer.guests)
+      ({offer}) => getTypeCompare(housingType.value, offer.type)
+      && getPriceCompare(housingPrice.value, offer.price)
+      && getNumberCompare(housingRooms.value, offer.rooms)
+      && getNumberCompare(housingGuests.value, offer.guests)
       && getFeaturesCompare(offer.features, selectedFeatures),
     );
 
