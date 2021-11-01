@@ -256,12 +256,13 @@ const getFeaturesCompare = (features, selectedFeatures) => {
 };
 
 const getFiltered = (housings) => {
-  const type = filters.elements['housing-type'].value;
-  const price = filters.elements['housing-price'].value;
-  const rooms = filters.elements['housing-rooms'].value;
-  const guests = filters.elements['housing-guests'].value;
+  const type = document.querySelector('#housing-type').value;
+  const price = document.querySelector('#housing-price').value;
+  const rooms =  document.querySelector('#housing-rooms').value;
+  const guests =  document.querySelector('#housing-guests').value;
+  const features = document.querySelectorAll('.map__checkbox');
 
-  const selectedFeatures = [...filters.elements['features']]
+  const selectedFeatures = [...features]
     .filter(({checked}) => checked)
     .map(({defaultValue}) => defaultValue);
 
