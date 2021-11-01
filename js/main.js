@@ -11,13 +11,13 @@ import {
 } from './form.js';
 import { createMap, addSimilarMarkers } from './map.js';
 import { onErrorNotice, onSuccessUserNotice, onErrorUserNotice, debounce } from './util.js';
-import { ZERO, AMOUNT_OF_HOUSING } from './const.js';
+import { AMOUNT_OF_HOUSING } from './const.js';
 
 toggleFiltersActivity(false);
 toggleFormActivity(false);
 
 const onSuccess = (housings) => {
-  addSimilarMarkers(housings.slice(ZERO, AMOUNT_OF_HOUSING));
+  addSimilarMarkers(housings.slice(0, AMOUNT_OF_HOUSING));
   toggleFiltersActivity(true);
   setFiltersChange(
     debounce(()=> {
@@ -33,7 +33,7 @@ const onMapLoading = () => {
   loadHousings()
     .then((housings) => {
       onSuccess(housings);
-      initialHousings = housings.slice(ZERO, AMOUNT_OF_HOUSING);
+      initialHousings = housings.slice(0, AMOUNT_OF_HOUSING);
     })
     .catch(onErrorNotice);
 

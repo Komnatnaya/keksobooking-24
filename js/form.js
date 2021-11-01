@@ -1,7 +1,7 @@
 import { getDeclension } from './util.js';
 import { sendData } from './data.js';
 import { resetMap, getMarkerCoordinates, removeSimilarMarkers, addSimilarMarkers } from './map.js';
-import { ZERO, AMOUNT_OF_HOUSING } from './const.js';
+import { AMOUNT_OF_HOUSING } from './const.js';
 
 const form = document.querySelector('.ad-form');
 const filters = document.querySelector('.map__filters');
@@ -109,12 +109,12 @@ const validateCapacity = () => {
     return;
   }
 
-  if (rooms === MAX_ROOM_CAPACITY && guests !== ZERO) {
+  if (rooms === MAX_ROOM_CAPACITY && guests !== 0) {
     addCustomValidity(inputCapacity, 'Не для гостей');
     return;
   }
 
-  if (guests === ZERO && rooms !== MAX_ROOM_CAPACITY) {
+  if (guests === 0 && rooms !== MAX_ROOM_CAPACITY) {
     addCustomValidity(inputCapacity, 'Укажите количество мест');
     return;
   }
@@ -144,7 +144,7 @@ const validateTitle = () => {
     [TooltipText.VALUE_1, TooltipText.VALUE_2, TooltipText.VALUE_3],
   );
 
-  if (count > ZERO && count < MIN_TITLE_LENGTH) {
+  if (count > 0 && count < MIN_TITLE_LENGTH) {
     addCustomValidity(inputTitle, `Еще ${MIN_TITLE_LENGTH - count} ${message}`);
     return;
   }
@@ -238,10 +238,10 @@ const getTypeCompare = (value, type) => value === DEFAULT_CHOICE ? true : value 
 const getNumberCompare = (value, rooms) => value === DEFAULT_CHOICE ? true : Number(value) === rooms;
 
 const getFeaturesCompare = (features, selectedFeatures) => {
-  if (!features && selectedFeatures.length > ZERO) { return false; }
-  if (selectedFeatures.length === ZERO) { return true; }
+  if (!features && selectedFeatures.length > 0) { return false; }
+  if (selectedFeatures.length === 0) { return true; }
 
-  for (let i = ZERO; i < selectedFeatures.length; i++) {
+  for (let i = 0; i < selectedFeatures.length; i++) {
     const isHavingFeature = features.some((feature) => feature === selectedFeatures[i]);
     if (!isHavingFeature) { return false; }
   }
@@ -269,7 +269,7 @@ const getFiltered = (housings) => {
     );
 
   removeSimilarMarkers();
-  addSimilarMarkers(filteredHousings.slice(ZERO, AMOUNT_OF_HOUSING));
+  addSimilarMarkers(filteredHousings.slice(0, AMOUNT_OF_HOUSING));
 };
 
 const setFiltersChange = (callback) => {
