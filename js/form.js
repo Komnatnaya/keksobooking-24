@@ -1,7 +1,7 @@
 import { getDeclension } from './util.js';
 import { sendData } from './data.js';
 import { resetMap, getMarkerCoordinates, removeSimilarMarkers, addSimilarMarkers } from './map.js';
-import { ZERO, AMOUNT_OF_HOUSING, INITIAL_KEY } from './const.js';
+import { ZERO, AMOUNT_OF_HOUSING } from './const.js';
 
 const form = document.querySelector('.ad-form');
 const filters = document.querySelector('.map__filters');
@@ -152,7 +152,7 @@ const validateTitle = () => {
   removeCustomValidity(inputTitle);
 };
 
-const reset = () => {
+const reset = (housings) => {
   resetMap();
   form.reset();
   filters.reset();
@@ -160,11 +160,9 @@ const reset = () => {
     address.value = `${getMarkerCoordinates().lat.toFixed(DIGITS)}, ${getMarkerCoordinates().lng.toFixed(DIGITS)}`;
     setMinPriceAttributes();
   });
-  const savedHousings = localStorage.getItem(INITIAL_KEY);
-  if (savedHousings) {
-    removeSimilarMarkers();
-    addSimilarMarkers(JSON.parse(savedHousings));
-  }
+
+  removeSimilarMarkers();
+  addSimilarMarkers(housings);
   [...form.elements].forEach((elem) => toggleBoxShadow(elem));
 };
 
