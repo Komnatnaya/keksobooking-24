@@ -19,13 +19,13 @@ const MAIN_ICON_SIZE = {
 const DIGITS = 5;
 
 const similarIcon = L.icon({
-  iconUrl: '../img/pin.svg',
+  iconUrl: './img/pin.svg',
   iconSize: [ICON_SIZE.width, ICON_SIZE.height],
   iconAnchor: [ICON_SIZE.width / 2, ICON_SIZE.height],
 });
 
 const mainIcon = L.icon({
-  iconUrl: '../img/main-pin.svg',
+  iconUrl: './img/main-pin.svg',
   iconSize: [MAIN_ICON_SIZE.width, MAIN_ICON_SIZE.height],
   iconAnchor: [MAIN_ICON_SIZE.width / 2, MAIN_ICON_SIZE.height],
 });

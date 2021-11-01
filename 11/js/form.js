@@ -1,7 +1,7 @@
 import { getDeclension } from './util.js';
 import { sendData } from './data.js';
 import { resetMap, getMarkerCoordinates, removeSimilarMarkers, addSimilarMarkers } from './map.js';
-import { ZERO, AMOUNT_OF_HOUSING, INITIAL_KEY } from './const.js';
+import { AMOUNT_OF_HOUSING } from './const.js';
 
 const form = document.querySelector('.ad-form');
 const filters = document.querySelector('.map__filters');
@@ -54,6 +54,12 @@ const DisabledClass = {
 const Price = {
   MIN: 10000,
   MAX: 50000,
+};
+
+const PriceLevel = {
+  LOW: 'low',
+  MIDDLE: 'middle',
+  HIGH: 'high',
 };
 
 const DEFAULT_CHOICE = 'any';
@@ -109,12 +115,12 @@ const validateCapacity = () => {
     return;
   }
 
-  if (rooms === MAX_ROOM_CAPACITY && guests !== ZERO) {
+  if (rooms === MAX_ROOM_CAPACITY && guests !== 0) {
     addCustomValidity(inputCapacity, 'Не для гостей');
     return;
   }
 
-  if (guests === ZERO && rooms !== MAX_ROOM_CAPACITY) {
+  if (guests === 0 && rooms !== MAX_ROOM_CAPACITY) {
     addCustomValidity(inputCapacity, 'Укажите количество мест');
     return;
   }
@@ -144,7 +150,7 @@ const validateTitle = () => {
     [TooltipText.VALUE_1, TooltipText.VALUE_2, TooltipText.VALUE_3],
   );
 
-  if (count > ZERO && count < MIN_TITLE_LENGTH) {
+  if (count > 0 && count < MIN_TITLE_LENGTH) {
     addCustomValidity(inputTitle, `Еще ${MIN_TITLE_LENGTH - count} ${message}`);
     return;
   }
@@ -152,7 +158,7 @@ const validateTitle = () => {
   removeCustomValidity(inputTitle);
 };
 
-const reset = () => {
+const reset = (housings) => {
   resetMap();
   form.reset();
   filters.reset();
@@ -160,11 +166,9 @@ const reset = () => {
     address.value = `${getMarkerCoordinates().lat.toFixed(DIGITS)}, ${getMarkerCoordinates().lng.toFixed(DIGITS)}`;
     setMinPriceAttributes();
   });
-  const savedHousings = localStorage.getItem(INITIAL_KEY);
-  if (savedHousings) {
-    removeSimilarMarkers();
-    addSimilarMarkers(JSON.parse(savedHousings));
-  }
+
+  removeSimilarMarkers();
+  addSimilarMarkers(housings);
   [...form.elements].forEach((elem) => toggleBoxShadow(elem));
 };
 
@@ -225,11 +229,11 @@ const setReset = (callback) => {
 
 const getPriceCompare = (value, price) => {
   switch (value) {
-    case 'low':
+    case PriceLevel.LOW:
       return price <= Price.MIN;
-    case 'middle':
+    case PriceLevel.MIDDLE:
       return price >= Price.MIN && price <= Price.MAX;
-    case 'high':
+    case PriceLevel.HIGH:
       return price >= Price.MAX;
     default:
       return true;
@@ -240,10 +244,10 @@ const getTypeCompare = (value, type) => value === DEFAULT_CHOICE ? true : value 
 const getNumberCompare = (value, rooms) => value === DEFAULT_CHOICE ? true : Number(value) === rooms;
 
 const getFeaturesCompare = (features, selectedFeatures) => {
-  if (!features && selectedFeatures.length > ZERO) { return false; }
-  if (selectedFeatures.length === ZERO) { return true; }
+  if (!features && selectedFeatures.length > 0) { return false; }
+  if (selectedFeatures.length === 0) { return true; }
 
-  for (let i = ZERO; i < selectedFeatures.length; i++) {
+  for (let i = 0; i < selectedFeatures.length; i++) {
     const isHavingFeature = features.some((feature) => feature === selectedFeatures[i]);
     if (!isHavingFeature) { return false; }
   }
@@ -252,12 +256,13 @@ const getFeaturesCompare = (features, selectedFeatures) => {
 };
 
 const getFiltered = (housings) => {
-  const type = filters.elements['housing-type'].value;
-  const price = filters.elements['housing-price'].value;
-  const rooms = filters.elements['housing-rooms'].value;
-  const guests = filters.elements['housing-guests'].value;
+  const type = document.querySelector('#housing-type').value;
+  const price = document.querySelector('#housing-price').value;
+  const rooms =  document.querySelector('#housing-rooms').value;
+  const guests =  document.querySelector('#housing-guests').value;
+  const features = document.querySelectorAll('.map__checkbox');
 
-  const selectedFeatures = [...filters.elements['features']]
+  const selectedFeatures = [...features]
     .filter(({checked}) => checked)
     .map(({defaultValue}) => defaultValue);
 
@@ -271,7 +276,7 @@ const getFiltered = (housings) => {
     );
 
   removeSimilarMarkers();
-  addSimilarMarkers(filteredHousings.slice(ZERO, AMOUNT_OF_HOUSING));
+  addSimilarMarkers(filteredHousings.slice(0, AMOUNT_OF_HOUSING));
 };
 
 const setFiltersChange = (callback) => {
