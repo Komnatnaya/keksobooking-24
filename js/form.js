@@ -56,6 +56,12 @@ const Price = {
   MAX: 50000,
 };
 
+const PriceLevel = {
+  LOW: 'low',
+  MIDDLE: 'middle',
+  HIGH: 'high',
+};
+
 const DEFAULT_CHOICE = 'any';
 
 const ATTENTION_STYLE = '0 0 2px 2px #ff6547';
@@ -223,11 +229,11 @@ const setReset = (callback) => {
 
 const getPriceCompare = (value, price) => {
   switch (value) {
-    case 'low':
+    case PriceLevel.LOW:
       return price <= Price.MIN;
-    case 'middle':
+    case PriceLevel.MIDDLE:
       return price >= Price.MIN && price <= Price.MAX;
-    case 'high':
+    case PriceLevel.HIGH:
       return price >= Price.MAX;
     default:
       return true;
