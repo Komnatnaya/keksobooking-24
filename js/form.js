@@ -172,8 +172,8 @@ const reset = (housings) => {
     setMinPriceAttributes();
   });
 
-  removeSimilarMarkers();
-  addSimilarMarkers(housings);
+  housings && removeSimilarMarkers();
+  housings && addSimilarMarkers(housings);
   [...form.elements].forEach((elem) => toggleBoxShadow(elem));
 };
 
