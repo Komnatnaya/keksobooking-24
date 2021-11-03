@@ -1,4 +1,4 @@
-import { getDeclension } from './util.js';
+import { getDeclension ,getImageChecking } from './util.js';
 import { sendData } from './data.js';
 import { resetMap, getMarkerCoordinates, removeSimilarMarkers, addSimilarMarkers } from './map.js';
 import { AMOUNT_OF_HOUSING } from './const.js';
@@ -69,8 +69,6 @@ const PriceLevel = {
   MIDDLE: 'middle',
   HIGH: 'high',
 };
-
-const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
 const DEFAULT_CHOICE = 'any';
 
@@ -292,12 +290,8 @@ const setFiltersChange = (callback) => {
 
 const setAvatarUploading = () => {
   avatarChooser.addEventListener('change', () => {
-    const file = avatarChooser.files[0];
-    const fileName = file.name.toLowerCase();
-    const matches = FILE_TYPES.some((extension) => fileName.endsWith(extension));
-
-    if (matches) {
-      preview.src = URL.createObjectURL(file);
+    if (getImageChecking(avatarChooser)) {
+      preview.src = URL.createObjectURL(avatarChooser.files[0]);
     }
   });
 };

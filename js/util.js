@@ -11,6 +11,8 @@ const container = document.querySelector('body');
 const ESC_KEY = 'Escape';
 const DELAY = 500;
 
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+
 const getDeclension = (number, titles) => {
   const cases = [2, 0, 1, 1, 1, 2];
   return titles[ (number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5] ];
@@ -61,10 +63,19 @@ const debounce = (callback, timeoutDelay = DELAY) => {
   };
 };
 
+const getImageChecking = (node) => {
+  const file = node.files[0];
+  const fileName = file.name.toLowerCase();
+
+  return FILE_TYPES.some((extension) => fileName.endsWith(extension));
+};
+
 export {
   getDeclension,
   onErrorNotice,
   onSuccessUserNotice,
   onErrorUserNotice,
-  debounce
+  debounce,
+  getImageChecking
+
 };
