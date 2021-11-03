@@ -77,7 +77,7 @@ const DEFAULT_CHOICE = 'any';
 
 const ATTENTION_STYLE = '0 0 2px 2px #ff6547';
 
-const toggleBoxShadow = (elem, isAdded) => elem.style.boxShadow = isAdded ? ATTENTION_STYLE : '';
+const toggleBoxShadow = (elem, isAdded) => elem.style.boxShadow = (isAdded === true) ? ATTENTION_STYLE : '';
 
 const toggleElementActivity = (node, isActive) => {
   [...node.elements]
