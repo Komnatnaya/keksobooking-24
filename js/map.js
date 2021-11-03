@@ -1,22 +1,27 @@
 import { getCardNode } from './card.js';
 
-const address = document.querySelector('#address');
+const MAP_ZOOM = 12;
+const DIGITS = 5;
+
 const POINT_OF_CENTER = {
   lat: 35.68940,
   lng: 139.69200,
 };
-const MAP_ZOOM = 12;
-let map = null;
-let markerGroup = null;
-const ICON_SIZE = {
-  width: 40,
-  height: 40,
-};
+
 const MAIN_ICON_SIZE = {
   width: 52,
   height: 52,
 };
-const DIGITS = 5;
+
+const ICON_SIZE = {
+  width: 40,
+  height: 40,
+};
+
+const addressElement = document.querySelector('#address');
+
+let map = null;
+let markerGroup = null;
 
 const similarIcon = L.icon({
   iconUrl: './img/pin.svg',
@@ -45,7 +50,7 @@ const create = (successCallback) => {
   map = L.map('map-canvas')
     .on('load', () => {
       successCallback();
-      address.value = `${POINT_OF_CENTER.lat.toFixed(DIGITS)}, ${POINT_OF_CENTER.lng.toFixed(DIGITS)}`;
+      addressElement.value = `${POINT_OF_CENTER.lat.toFixed(DIGITS)}, ${POINT_OF_CENTER.lng.toFixed(DIGITS)}`;
     })
     .setView({
       lat: POINT_OF_CENTER.lat,
@@ -60,7 +65,7 @@ const create = (successCallback) => {
   ).addTo(map);
 
   mainMarker.on('move', (evt) => {
-    address.value = evt.target.toGeoJSON().geometry.coordinates
+    addressElement.value = evt.target.toGeoJSON().geometry.coordinates
       .map((coordinate) => coordinate.toFixed(DIGITS))
       .reverse()
       .join(', ');
