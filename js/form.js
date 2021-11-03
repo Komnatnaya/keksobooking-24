@@ -1,26 +1,32 @@
-import { getDeclension } from './util.js';
+import { getDeclension ,getImageChecking } from './util.js';
 import { sendData } from './data.js';
 import { resetMap, getMarkerCoordinates, removeSimilarMarkers, addSimilarMarkers } from './map.js';
 import { AMOUNT_OF_HOUSING } from './const.js';
 
-const form = document.querySelector('.ad-form');
-const filters = document.querySelector('.map__filters');
-const formElements = ['fieldset', 'select'];
-const inputTitle = form.querySelector('#title');
-const inputType = form.querySelector('#type');
-const inputPrice = form.querySelector('#price');
-const inputCapacity = form.querySelector('#capacity');
-const formButtonSubmit = form.querySelector('.ad-form__submit');
-const roomNumber = form.querySelector('#room_number');
-const checkIn = form.querySelector('#timein');
-const checkOut = form.querySelector('#timeout');
-const resetButton = form.querySelector('.ad-form__reset');
-const address = form.querySelector('#address');
-const housingType = filters.querySelector('#housing-type');
-const housingPrice = filters.querySelector('#housing-price');
-const housingRooms =  filters.querySelector('#housing-rooms');
-const housingGuests =  filters.querySelector('#housing-guests');
-const featuresElements = filters.querySelectorAll('.map__checkbox');
+const userFormElement = document.querySelector('.ad-form');
+const filtersFormElement = document.querySelector('.map__filters');
+const titleElement = userFormElement.querySelector('#title');
+const typeElement = userFormElement.querySelector('#type');
+const priceElement = userFormElement.querySelector('#price');
+const capacityElement = userFormElement.querySelector('#capacity');
+const buttonSubmitElement = userFormElement.querySelector('.ad-form__submit');
+const roomElement = userFormElement.querySelector('#room_number');
+const checkInElement = userFormElement.querySelector('#timein');
+const checkOutElement = userFormElement.querySelector('#timeout');
+const buttonResetElement = userFormElement.querySelector('.ad-form__reset');
+const addressElement = userFormElement.querySelector('#address');
+const housingTypeElement = filtersFormElement.querySelector('#housing-type');
+const housingPriceElement = filtersFormElement.querySelector('#housing-price');
+const housingRoomsElement =  filtersFormElement.querySelector('#housing-rooms');
+const housingGuestsElement =  filtersFormElement.querySelector('#housing-guests');
+const featuresElements = filtersFormElement.querySelectorAll('.map__checkbox');
+const avatarChooseElement = userFormElement.querySelector('#avatar');
+const previewElement = userFormElement.querySelector('.ad-form-header__preview img');
+const imageChooseElement = userFormElement.querySelector('#images');
+const imageContainerElement = userFormElement.querySelector('.ad-form__photo');
+
+const formTags = ['fieldset', 'select'];
+const initialPreviewSrc = previewElement.src;
 
 const TooltipText = {
   VALUE_1: 'символ',
@@ -75,28 +81,28 @@ const toggleBoxShadow = (elem, isAdded) => elem.style.boxShadow = isAdded ? ATTE
 
 const toggleElementActivity = (node, isActive) => {
   [...node.elements]
-    .filter((elem) => formElements.includes(elem.tagName.toLowerCase()))
+    .filter((elem) => formTags.includes(elem.tagName.toLowerCase()))
     .forEach((elem) => elem.disabled = !isActive);
 };
 
 const toggleFormActivity = (isActive = false) => {
-  toggleElementActivity(form, isActive);
+  toggleElementActivity(userFormElement, isActive);
   if (isActive) {
-    form.classList.remove(DisabledClass.FORM);
+    userFormElement.classList.remove(DisabledClass.FORM);
     return;
   }
 
-  form.classList.add(DisabledClass.FORM);
+  userFormElement.classList.add(DisabledClass.FORM);
 };
 
 const toggleFiltersActivity = (isActive = false) => {
-  toggleElementActivity(filters, isActive);
+  toggleElementActivity(filtersFormElement, isActive);
   if (isActive) {
-    filters.classList.remove(DisabledClass.FILTERS);
+    filtersFormElement.classList.remove(DisabledClass.FILTERS);
     return;
   }
 
-  filters.classList.add(DisabledClass.FILTERS);
+  filtersFormElement.classList.add(DisabledClass.FILTERS);
 };
 
 const addCustomValidity = (elem, text) => {
@@ -110,112 +116,114 @@ const removeCustomValidity = (elem) => {
 };
 
 const validateCapacity = () => {
-  const rooms = Number(roomNumber.value);
-  const guests = Number(inputCapacity.value);
+  const rooms = Number(roomElement.value);
+  const guests = Number(capacityElement.value);
   const roomDec = getDeclension(rooms, [Room.VALUE_1, Room.VALUE_2]);
   const guestDec = getDeclension(rooms, [Guest.SINGLE, Guest.SEVERAL, Guest.MANY]);
 
   if (rooms < guests && rooms !== MAX_ROOM_CAPACITY) {
-    addCustomValidity(inputCapacity, `В ${rooms} ${roomDec} максимум ${rooms} ${guestDec}`);
+    addCustomValidity(capacityElement, `В ${rooms} ${roomDec} максимум ${rooms} ${guestDec}`);
     return;
   }
 
   if (rooms === MAX_ROOM_CAPACITY && guests !== 0) {
-    addCustomValidity(inputCapacity, 'Не для гостей');
+    addCustomValidity(capacityElement, 'Не для гостей');
     return;
   }
 
   if (guests === 0 && rooms !== MAX_ROOM_CAPACITY) {
-    addCustomValidity(inputCapacity, 'Укажите количество мест');
+    addCustomValidity(capacityElement, 'Укажите количество мест');
     return;
   }
 
-  removeCustomValidity(inputCapacity);
+  removeCustomValidity(capacityElement);
 };
 
 const validatePrice = () => {
-  if (Number(inputPrice.value) < Number(inputPrice.min)) {
-    addCustomValidity(inputPrice, `Минимальная цена ${inputPrice.min}`);
+  if (Number(priceElement.value) < Number(priceElement.min)) {
+    addCustomValidity(priceElement, `Минимальная цена ${priceElement.min}`);
     return;
   }
 
-  removeCustomValidity(inputPrice);
+  removeCustomValidity(priceElement);
 };
 
 const setMinPriceAttributes = () => {
-  const minPrice = ApartmentMinPrice[inputType.value.toUpperCase()];
-  inputPrice.placeholder = minPrice;
-  inputPrice.min = minPrice;
+  const minPrice = ApartmentMinPrice[typeElement.value.toUpperCase()];
+  priceElement.placeholder = minPrice;
+  priceElement.min = minPrice;
 };
 
 const validateTitle = () => {
-  const count = inputTitle.value.length;
+  const count = titleElement.value.length;
   const message = getDeclension(
     MIN_TITLE_LENGTH - count,
     [TooltipText.VALUE_1, TooltipText.VALUE_2, TooltipText.VALUE_3],
   );
 
   if (count > 0 && count < MIN_TITLE_LENGTH) {
-    addCustomValidity(inputTitle, `Еще ${MIN_TITLE_LENGTH - count} ${message}`);
+    addCustomValidity(titleElement, `Еще ${MIN_TITLE_LENGTH - count} ${message}`);
     return;
   }
 
-  removeCustomValidity(inputTitle);
+  removeCustomValidity(titleElement);
 };
 
 const reset = (housings) => {
   resetMap();
-  form.reset();
-  filters.reset();
+  userFormElement.reset();
+  previewElement.src = initialPreviewSrc;
+  imageContainerElement.innerHTML = '';
+  filtersFormElement.reset();
   setTimeout(() => {
-    address.value = `${getMarkerCoordinates().lat.toFixed(DIGITS)}, ${getMarkerCoordinates().lng.toFixed(DIGITS)}`;
+    addressElement.value = `${getMarkerCoordinates().lat.toFixed(DIGITS)}, ${getMarkerCoordinates().lng.toFixed(DIGITS)}`;
     setMinPriceAttributes();
   });
 
   housings && removeSimilarMarkers();
   housings && addSimilarMarkers(housings);
-  [...form.elements].forEach((elem) => toggleBoxShadow(elem));
+  [...userFormElement.elements].forEach((elem) => toggleBoxShadow(elem));
 };
 
 const setValidation = () => {
-  inputTitle.addEventListener('input', () => {
+  titleElement.addEventListener('input', () => {
     validateTitle();
   });
 
-  inputPrice.addEventListener('input', () => {
+  priceElement.addEventListener('input', () => {
     validatePrice();
   });
 
-  inputType.addEventListener('change', () => {
+  typeElement.addEventListener('change', () => {
     setMinPriceAttributes();
     validatePrice();
   });
 
-  inputCapacity.addEventListener('change', () => {
+  capacityElement.addEventListener('change', () => {
     validateCapacity();
   });
 
-  roomNumber.addEventListener('change', () => {
+  roomElement.addEventListener('change', () => {
     validateCapacity();
   });
 
-  formButtonSubmit.addEventListener('click', () => {
-    [...form.elements]
+  buttonSubmitElement.addEventListener('click', () => {
+    [...userFormElement.elements]
       .filter((elem) => !elem.checkValidity())
       .forEach((elem) => toggleBoxShadow(elem, true));
   });
 
-  checkIn.addEventListener('change', () => {
-    checkOut.value = checkIn.value;
+  checkInElement.addEventListener('change', () => {
+    checkOutElement.value = checkInElement.value;
   });
 
-  checkOut.addEventListener('change', () => {
-    checkIn.value = checkOut.value;
+  checkOutElement.addEventListener('change', () => {
+    checkInElement.value = checkOutElement.value;
   });
 };
 
 const setSubmit = (onSuccess, onError) => {
-  form.addEventListener('submit', (evt) => {
+  userFormElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     sendData(
@@ -227,7 +235,7 @@ const setSubmit = (onSuccess, onError) => {
 };
 
 const setReset = (callback) => {
-  resetButton.addEventListener('click', () => {
+  buttonResetElement.addEventListener('click', () => {
     callback();
   });
 };
@@ -267,10 +275,10 @@ const getFiltered = (housings) => {
 
   const filteredHousings = housings.slice()
     .filter(
-      ({offer}) => getTypeCompare(housingType.value, offer.type)
-      && getPriceCompare(housingPrice.value, offer.price)
-      && getNumberCompare(housingRooms.value, offer.rooms)
-      && getNumberCompare(housingGuests.value, offer.guests)
+      ({offer}) => getTypeCompare(housingTypeElement.value, offer.type)
+      && getPriceCompare(housingPriceElement.value, offer.price)
+      && getNumberCompare(housingRoomsElement.value, offer.rooms)
+      && getNumberCompare(housingGuestsElement.value, offer.guests)
       && getFeaturesCompare(offer.features, selectedFeatures),
     );
 
@@ -279,8 +287,32 @@ const getFiltered = (housings) => {
 };
 
 const setFiltersChange = (callback) => {
-  filters.addEventListener('change', () => {
+  filtersFormElement.addEventListener('change', () => {
     callback();
+  });
+};
+
+const setAvatarUploading = () => {
+  avatarChooseElement.addEventListener('change', () => {
+    if (getImageChecking(avatarChooseElement)) {
+      previewElement.src = URL.createObjectURL(avatarChooseElement.files[0]);
+    }
+  });
+};
+
+const setPhotoUploading = () => {
+  imageChooseElement.addEventListener('change', () => {
+    if (getImageChecking(imageChooseElement)) {
+      const styleWidth = getComputedStyle(imageContainerElement).width;
+      const styleHeight = getComputedStyle(imageContainerElement).height;
+      const image = document.createElement('img');
+      image.src = URL.createObjectURL(imageChooseElement.files[0]);
+      image.width = parseInt(styleWidth, 10);
+      image.height = parseInt(styleHeight, 10);
+      image.style.objectFit = 'fill';
+      imageContainerElement.innerHTML = '';
+      imageContainerElement.append(image);
+    }
   });
 };
 
@@ -292,5 +324,7 @@ export {
   reset as resetForm,
   setReset as setFormReset,
   setFiltersChange,
-  getFiltered
+  getFiltered,
+  setAvatarUploading,
+  setPhotoUploading
 };
