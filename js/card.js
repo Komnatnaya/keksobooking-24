@@ -1,6 +1,6 @@
 import { getDeclension } from './util.js';
 
-const templateCard = document.querySelector('#card').content.querySelector('.popup');
+const templateCardElement = document.querySelector('#card').content.querySelector('.popup');
 
 const Apartment = {
   FLAT: 'Квартира',
@@ -34,7 +34,7 @@ const getPhotoNodes = (template, photos) => {
 };
 
 const getNode = ({author, offer}) => {
-  const card = templateCard.cloneNode(true);
+  const card = templateCardElement.cloneNode(true);
 
   const avatar = card.querySelector('.popup__avatar');
   const title = card.querySelector('.popup__title');

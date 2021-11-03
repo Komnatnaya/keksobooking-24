@@ -1,12 +1,12 @@
-const successNode = document.querySelector('#success')
+const successElement = document.querySelector('#success')
   .content.querySelector('.success')
   .cloneNode(true);
 
-const errorNode = document.querySelector('#error')
+const errorElement = document.querySelector('#error')
   .content.querySelector('.error')
   .cloneNode(true);
 
-const container = document.querySelector('body');
+const containerElement = document.querySelector('body');
 
 const ESC_KEY = 'Escape';
 const DELAY = 500;
@@ -42,7 +42,7 @@ const showNotice = (node) => {
     }
   };
 
-  container.append(node);
+  containerElement.append(node);
   node.addEventListener('click', () => {
     node.remove();
     window.removeEventListener('keydown', onWindowKeydown);
@@ -51,8 +51,8 @@ const showNotice = (node) => {
   window.addEventListener('keydown', onWindowKeydown);
 };
 
-const onSuccessUserNotice = () => showNotice(successNode);
-const onErrorUserNotice = () => showNotice(errorNode);
+const onSuccessUserNotice = () => showNotice(successElement);
+const onErrorUserNotice = () => showNotice(errorElement);
 
 const debounce = (callback, timeoutDelay = DELAY) => {
   let timeoutId;
