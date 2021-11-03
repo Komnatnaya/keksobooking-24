@@ -21,6 +21,9 @@ const housingPrice = filters.querySelector('#housing-price');
 const housingRooms =  filters.querySelector('#housing-rooms');
 const housingGuests =  filters.querySelector('#housing-guests');
 const featuresElements = filters.querySelectorAll('.map__checkbox');
+const avatarChooser = form.querySelector('#avatar');
+const preview = form.querySelector('.ad-form-header__preview img');
+const initialPreviewSrc = preview.src;
 
 const TooltipText = {
   VALUE_1: 'символ',
@@ -66,6 +69,8 @@ const PriceLevel = {
   MIDDLE: 'middle',
   HIGH: 'high',
 };
+
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
 const DEFAULT_CHOICE = 'any';
 
@@ -166,6 +171,7 @@ const validateTitle = () => {
 const reset = (housings) => {
   resetMap();
   form.reset();
+  preview.src = initialPreviewSrc;
   filters.reset();
   setTimeout(() => {
     address.value = `${getMarkerCoordinates().lat.toFixed(DIGITS)}, ${getMarkerCoordinates().lng.toFixed(DIGITS)}`;
@@ -284,6 +290,18 @@ const setFiltersChange = (callback) => {
   });
 };
 
+const setAvatarUploading = () => {
+  avatarChooser.addEventListener('change', () => {
+    const file = avatarChooser.files[0];
+    const fileName = file.name.toLowerCase();
+    const matches = FILE_TYPES.some((extension) => fileName.endsWith(extension));
+
+    if (matches) {
+      preview.src = URL.createObjectURL(file);
+    }
+  });
+};
+
 export {
   setValidation as setValidationForm,
   toggleFormActivity,
@@ -292,5 +310,6 @@ export {
   reset as resetForm,
   setReset as setFormReset,
   setFiltersChange,
-  getFiltered
+  getFiltered,
+  setAvatarUploading
 };

@@ -7,7 +7,8 @@ import {
   resetForm,
   setFormReset,
   setFiltersChange,
-  getFiltered
+  getFiltered,
+  setAvatarUploading
 } from './form.js';
 import { createMap, addSimilarMarkers } from './map.js';
 import { onErrorNotice, onSuccessUserNotice, onErrorUserNotice, debounce } from './util.js';
@@ -30,6 +31,7 @@ const onMapLoading = () => {
 
   toggleFormActivity(true);
   setValidationForm();
+  setAvatarUploading();
   loadHousings()
     .then((housings) => {
       onSuccess(housings);
