@@ -1,0 +1,3 @@
+const AMOUNT_OF_HOUSING = 10;
+
+export { AMOUNT_OF_HOUSING };
