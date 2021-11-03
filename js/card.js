@@ -1,7 +1,5 @@
 import { getDeclension } from './util.js';
 
-const templateCardElement = document.querySelector('#card').content.querySelector('.popup');
-
 const Apartment = {
   FLAT: 'Квартира',
   BUNGALOW: 'Бунгало',
@@ -20,6 +18,8 @@ const Room = {
   VALUE_2: 'комнаты',
   VALUE_3: 'комнат',
 };
+
+const templateCardElement = document.querySelector('#card').content.querySelector('.popup');
 
 const getPhotoNodes = (template, photos) => {
   const photoNodes = document.createDocumentFragment();

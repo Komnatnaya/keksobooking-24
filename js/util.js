@@ -1,6 +1,6 @@
 const ESC_KEY = 'Escape';
 const DELAY = 500;
-const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+const EXTENSIONS = ['jpg', 'jpeg', 'png'];
 
 const successElement = document.querySelector('#success')
   .content.querySelector('.success')
@@ -66,7 +66,7 @@ const getImageChecking = (node) => {
   const file = node.files[0];
   const fileName = file.name.toLowerCase();
 
-  return FILE_TYPES.some((extension) => fileName.endsWith(extension));
+  return EXTENSIONS.some((extension) => fileName.endsWith(extension));
 };
 
 export {
