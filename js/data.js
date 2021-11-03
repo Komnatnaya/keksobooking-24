@@ -1,5 +1,8 @@
 const LOAD_FROM = 'https://24.javascript.pages.academy/keksobooking/data';
 const UPLOAD_TO = 'https://24.javascript.pages.academy/keksobooking';
+const Method = {
+  POST: 'POST',
+};
 
 const loadHousings = () =>
   fetch(LOAD_FROM)
@@ -14,7 +17,7 @@ const send = (onSuccess, onError, body) => {
   fetch(
     UPLOAD_TO,
     {
-      method: 'POST',
+      method: Method.POST,
       body,
     },
   )

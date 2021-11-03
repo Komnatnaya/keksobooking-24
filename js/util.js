@@ -1,3 +1,7 @@
+const ESC_KEY = 'Escape';
+const DELAY = 500;
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+
 const successElement = document.querySelector('#success')
   .content.querySelector('.success')
   .cloneNode(true);
@@ -7,11 +11,6 @@ const errorElement = document.querySelector('#error')
   .cloneNode(true);
 
 const containerElement = document.querySelector('body');
-
-const ESC_KEY = 'Escape';
-const DELAY = 500;
-
-const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
 const getDeclension = (number, titles) => {
   const cases = [2, 0, 1, 1, 1, 2];

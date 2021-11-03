@@ -3,40 +3,17 @@ import { sendData } from './data.js';
 import { resetMap, getMarkerCoordinates, removeSimilarMarkers, addSimilarMarkers } from './map.js';
 import { AMOUNT_OF_HOUSING } from './const.js';
 
-const userFormElement = document.querySelector('.ad-form');
-const filtersFormElement = document.querySelector('.map__filters');
-const titleElement = userFormElement.querySelector('#title');
-const typeElement = userFormElement.querySelector('#type');
-const priceElement = userFormElement.querySelector('#price');
-const capacityElement = userFormElement.querySelector('#capacity');
-const buttonSubmitElement = userFormElement.querySelector('.ad-form__submit');
-const roomElement = userFormElement.querySelector('#room_number');
-const checkInElement = userFormElement.querySelector('#timein');
-const checkOutElement = userFormElement.querySelector('#timeout');
-const buttonResetElement = userFormElement.querySelector('.ad-form__reset');
-const addressElement = userFormElement.querySelector('#address');
-const housingTypeElement = filtersFormElement.querySelector('#housing-type');
-const housingPriceElement = filtersFormElement.querySelector('#housing-price');
-const housingRoomsElement =  filtersFormElement.querySelector('#housing-rooms');
-const housingGuestsElement =  filtersFormElement.querySelector('#housing-guests');
-const featuresElements = filtersFormElement.querySelectorAll('.map__checkbox');
-const avatarChooseElement = userFormElement.querySelector('#avatar');
-const previewElement = userFormElement.querySelector('.ad-form-header__preview img');
-const imageChooseElement = userFormElement.querySelector('#images');
-const imageContainerElement = userFormElement.querySelector('.ad-form__photo');
-
-const formTags = ['fieldset', 'select'];
-const initialPreviewSrc = previewElement.src;
+const DEFAULT_CHOICE = 'any';
+const ATTENTION_STYLE = '0 0 2px 2px #ff6547';
+const MIN_TITLE_LENGTH = 30;
+const MAX_ROOM_CAPACITY = 100;
+const DIGITS = 5;
 
 const TooltipText = {
   VALUE_1: 'символ',
   VALUE_2: 'символа',
   VALUE_3: 'символов',
 };
-
-const MIN_TITLE_LENGTH = 30;
-const MAX_ROOM_CAPACITY = 100;
-const DIGITS = 5;
 
 const ApartmentMinPrice = {
   FLAT: 1000,
@@ -73,9 +50,30 @@ const PriceLevel = {
   HIGH: 'high',
 };
 
-const DEFAULT_CHOICE = 'any';
+const userFormElement = document.querySelector('.ad-form');
+const filtersFormElement = document.querySelector('.map__filters');
+const titleElement = userFormElement.querySelector('#title');
+const typeElement = userFormElement.querySelector('#type');
+const priceElement = userFormElement.querySelector('#price');
+const capacityElement = userFormElement.querySelector('#capacity');
+const buttonSubmitElement = userFormElement.querySelector('.ad-form__submit');
+const roomElement = userFormElement.querySelector('#room_number');
+const checkInElement = userFormElement.querySelector('#timein');
+const checkOutElement = userFormElement.querySelector('#timeout');
+const buttonResetElement = userFormElement.querySelector('.ad-form__reset');
+const addressElement = userFormElement.querySelector('#address');
+const housingTypeElement = filtersFormElement.querySelector('#housing-type');
+const housingPriceElement = filtersFormElement.querySelector('#housing-price');
+const housingRoomsElement =  filtersFormElement.querySelector('#housing-rooms');
+const housingGuestsElement =  filtersFormElement.querySelector('#housing-guests');
+const featuresElements = filtersFormElement.querySelectorAll('.map__checkbox');
+const avatarChooseElement = userFormElement.querySelector('#avatar');
+const previewElement = userFormElement.querySelector('.ad-form-header__preview img');
+const imageChooseElement = userFormElement.querySelector('#images');
+const imageContainerElement = userFormElement.querySelector('.ad-form__photo');
 
-const ATTENTION_STYLE = '0 0 2px 2px #ff6547';
+const formTags = ['fieldset', 'select'];
+const initialPreviewSrc = previewElement.src;
 
 const toggleBoxShadow = (elem, isAdded) => elem.style.boxShadow = (isAdded === true) ? ATTENTION_STYLE : '';
 
