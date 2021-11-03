@@ -24,6 +24,8 @@ const featuresElements = filters.querySelectorAll('.map__checkbox');
 const avatarChooser = form.querySelector('#avatar');
 const preview = form.querySelector('.ad-form-header__preview img');
 const initialPreviewSrc = preview.src;
+const imageChooser = form.querySelector('#images');
+const imageContainer = form.querySelector('.ad-form__photo');
 
 const TooltipText = {
   VALUE_1: 'символ',
@@ -170,6 +172,7 @@ const reset = (housings) => {
   resetMap();
   form.reset();
   preview.src = initialPreviewSrc;
+  imageContainer.innerHTML = '';
   filters.reset();
   setTimeout(() => {
     address.value = `${getMarkerCoordinates().lat.toFixed(DIGITS)}, ${getMarkerCoordinates().lng.toFixed(DIGITS)}`;
@@ -296,6 +299,22 @@ const setAvatarUploading = () => {
   });
 };
 
+const setPhotoUploading = () => {
+  imageChooser.addEventListener('change', () => {
+    if (getImageChecking(imageChooser)) {
+      const styleWidth = getComputedStyle(imageContainer).width;
+      const styleHeight = getComputedStyle(imageContainer).height;
+      const image = document.createElement('img');
+      image.src = URL.createObjectURL(imageChooser.files[0]);
+      image.width = parseInt(styleWidth, 10);
+      image.height = parseInt(styleHeight, 10);
+      image.style.objectFit = 'fill';
+      imageContainer.innerHTML = '';
+      imageContainer.append(image);
+    }
+  });
+};
+
 export {
   setValidation as setValidationForm,
   toggleFormActivity,
@@ -305,5 +324,6 @@ export {
   setReset as setFormReset,
   setFiltersChange,
   getFiltered,
-  setAvatarUploading
+  setAvatarUploading,
+  setPhotoUploading
 };
