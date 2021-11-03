@@ -80,7 +80,9 @@ const toggleBoxShadow = (elem, isAdded) => elem.style.boxShadow = (isAdded === t
 const toggleElementActivity = (node, isActive) => {
   [...node.elements]
     .filter((elem) => formTags.includes(elem.tagName.toLowerCase()))
-    .forEach((elem) => elem.disabled = !isActive);
+    .forEach((elem) => {
+      elem.disabled = !isActive;
+    });
 };
 
 const toggleFormActivity = (isActive = false) => {
